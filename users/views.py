@@ -9,7 +9,6 @@ from django.views.generic import (
     DeleteView
 )
 from .models import Card
-from cryptography.fernet import Fernet
 
 def register(request):
     if request.method == 'POST':
