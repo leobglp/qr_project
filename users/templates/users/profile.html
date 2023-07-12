@@ -1,0 +1,49 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+        <div class="media-body">
+            <h2 class="account-heading">{{ user.username }}</h2>
+            <p class="text-secondary">{{ user.email }}</p>
+        </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ u_form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+    
+    {% for card in cards %}
+        <div class="container mt-5">
+            <div class="card">
+                {% if card.author == user %}
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title m-0">Informações do Cartão de Crédito</h5>
+                            <i class="bi bi-eye-fill ml-2" id="btn-hideInfo{{ card.id }}" onclick="showPass('cardInfo{{ card.id }}', 'btn-hideInfo{{ card.id }}')"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body" id="cardInfo{{ card.id }}">
+                        
+                        <p class="card-text">Número do Cartão: {{ card.numero }}</p>
+                        <p class="card-text">Titular do Cartão: {{ card.titular }}</p>
+                        <p class="card-text">Validade: {{ card.validade }}</p>
+                        <p class="card-text">CVV: {{ card.cvv }}</p>
+                        <div class="container">
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'card-update' card.id %}">Update</a>
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'card-delete' card.id %}">Delete</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}
